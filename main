@@ -1,0 +1,207 @@
+-- Load Rayfield GUI
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- Create the main window
+local Window = Rayfield:CreateWindow({
+    Name = "Sky Clickers | v1.1",
+    LoadingTitle = "Sky Clickers",
+    LoadingSubtitle = "by semeone!",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = nil,  -- Folder name for saving configuration
+        FileName = "Rex Hub"
+    }
+})
+
+-- Tabs and Sections
+local UtilityTab = Window:CreateTab("Utility's")
+local GuiTab = Window:CreateTab("Guis")
+local MiscTab = Window:CreateTab("Misc")
+
+-- Sections within Tabs
+UtilityTab:CreateSection("Auto Functions")
+GuiTab:CreateSection("Quick GUI Access")
+MiscTab:CreateSection("Miscellaneous")
+
+-- Global variables and settings
+local rebirthOptions = {
+    ["1 Rebirth"] = 1,
+    ["5 Rebirths"] = 2,
+    ["10 Rebirths"] = 3,
+    ["25 Rebirths"] = 4,
+    ["50 Rebirths"] = 5,
+    ["100 Rebirths"] = 6,
+    ["250 Rebirths"] = 7,
+    ["500 Rebirths"] = 8
+}
+
+local selectedAmount = 1
+local autoTapLooping = false
+local rebirthLooping = false
+
+-- Auto Tap and Rebirth Functions
+local function simulateClick()
+    game:GetService("ReplicatedStorage"):WaitForChild("GameClient"):WaitForChild("Events"):WaitForChild("RemoteEvent"):WaitForChild("BottomButtons"):FireServer({["Type"] = "Normal"})
+end
+
+local function invokeRebirth(amount)
+    local args = {
+        [1] = {
+            ["Type"] = "Rebirth",
+            ["Amount"] = amount
+        }
+    }
+    game:GetService("ReplicatedStorage"):WaitForChild("GameClient"):WaitForChild("Events"):WaitForChild("RemoteFunction"):WaitForChild("Rebirths"):InvokeServer(unpack(args))
+    print("Invoked rebirth with amount: " .. tostring(amount))
+end
+
+local function startAutoTap()
+    while autoTapLooping do
+        simulateClick()
+        wait(0)  -- Adjust the interval if necessary
+    end
+end
+
+local function startRebirthLoop()
+    while rebirthLooping do
+        invokeRebirth(selectedAmount)
+        wait(0.1)  -- Adjust the interval if necessary
+    end
+end
+
+-- Function to update the selected dropdown value
+local function handleDropdownChange(option)
+    if type(option) == "table" then
+        option = option[1]
+    end
+    
+    if type(option) == "string" then
+        local newAmount = rebirthOptions[option]
+        if newAmount then
+            selectedAmount = newAmount
+            print("Dropdown selected: " .. option .. " , Mapped Amount: " .. selectedAmount)
+            
+            -- If looping is active, restart the loop with the new value
+            if rebirthLooping then
+                rebirthLooping = false
+                wait(0.1)
+                rebirthLooping = true
+                coroutine.wrap(startRebirthLoop)()
+            end
+        else
+            print("Error: selectedAmount mapping failed for option: " .. tostring(option))
+        end
+    else
+        print("Error: Dropdown option is not a string: " .. tostring(option))
+    end
+end
+
+-- Create GUI elements
+UtilityTab:CreateToggle({
+    Name = "Auto Tap",
+    CurrentValue = false,
+    Flag = "AutoTapToggle",
+    Callback = function(value)
+        autoTapLooping = value
+        if autoTapLooping then
+            spawn(startAutoTap)
+            print("Auto Tap enabled")
+        else
+            print("Auto Tap disabled")
+        end
+    end
+})
+
+UtilityTab:CreateDropdown({
+    Name = "Select Rebirth Amount",
+    Options = {"1 Rebirth", "5 Rebirths", "10 Rebirths", "25 Rebirths", "50 Rebirths", "100 Rebirths", "250 Rebirths", "500 Rebirths"},
+    CurrentOption = "1 Rebirth",
+    MultipleOptions = false,
+    Flag = "RebirthAmountDropdown",
+    Callback = handleDropdownChange
+})
+
+UtilityTab:CreateToggle({
+    Name = "Auto Rebirth",
+    CurrentValue = false,
+    Flag = "AutoRebirthToggle",
+    Callback = function(value)
+        rebirthLooping = value
+        if rebirthLooping then
+            print("Rebirth loop started with amount: " .. selectedAmount)
+            coroutine.wrap(startRebirthLoop)()
+        else
+            print("Rebirth loop stopped")
+        end
+    end
+})
+
+-- Additional Buttons
+GuiTab:CreateButton({
+    Name = "Auras",
+    Callback = function()
+        local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+        local aurasFrame = playerGui:WaitForChild("MainUI"):WaitForChild("AurasFrame")
+        aurasFrame.Visible = not aurasFrame.Visible
+    end
+})
+
+GuiTab:CreateButton({
+    Name = "Index",
+    Callback = function()
+        local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+        local IndexFrame = playerGui:WaitForChild("MainUI"):WaitForChild("IndexFrame")
+        IndexFrame.Visible = not IndexFrame.Visible
+    end
+})
+
+GuiTab:CreateButton({
+    Name = "Update Log",
+    Callback = function()
+        local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+        local TradePlayerList = playerGui:WaitForChild("MainUI"):WaitForChild("TradePlayerList")
+        TradePlayerList.Visible = not TradePlayerList.Visible
+    end
+})
+
+MiscTab:CreateButton({
+    Name = "Unlock All Islands",
+    Callback = function()
+        local cframes = {
+            CFrame.new(-45.2208328, 655.03302, 32.4810486),
+            CFrame.new(-12.0547447, 1775.2915, 69.9209671),
+            CFrame.new(-1.27225876, 3221.25049, -4.00170898),
+            CFrame.new(-69.4390259, 5127.85059, 27.139679)
+        }
+        for _, cframe in ipairs(cframes) do
+            wait(1)
+            teleportToCFrame(cframe)
+        end
+    end
+})
+
+MiscTab:CreateButton({
+    Name = "Infinite Yield",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
+    end
+})
+
+MiscTab:CreateButton({
+    Name = "Claim All Chests",
+    Callback = function()
+        local targetCFrame = CFrame.new(0.594842911, 659.270874, 65.061264)
+        local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = targetCFrame
+        end
+    end
+})
+
+-- Helper function for teleporting the player
+local function teleportToCFrame(cframe)
+    local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        character.HumanoidRootPart.CFrame = cframe
+    end
+end
