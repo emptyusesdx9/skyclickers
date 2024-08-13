@@ -174,11 +174,12 @@ MiscTab:CreateButton({
             CFrame.new(-69.4390259, 5127.85059, 27.139679)
         }
         for _, cframe in ipairs(cframes) do
-            wait(1)
-            teleportToCFrame(cframe)
+            wait(1)  -- Aguarda 1 segundo entre os teletransportes
+            teleportToCFrame(cframe)  -- Teletransporta o jogador
         end
     end
 })
+
 
 MiscTab:CreateButton({
     Name = "Infinite Yield",
