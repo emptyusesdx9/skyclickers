@@ -3,9 +3,9 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 -- Create the main window
 local Window = Rayfield:CreateWindow({
-    Name = "Sky Clickers | v1.1",
+    Name = "Sky Clickers | v1.2",
     LoadingTitle = "Sky Clickers",
-    LoadingSubtitle = "by semeone!",
+    LoadingSubtitle = "by rex",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = nil,  -- Folder name for saving configuration
@@ -14,9 +14,9 @@ local Window = Rayfield:CreateWindow({
 })
 
 -- Tabs and Sections
-local UtilityTab = Window:CreateTab("Utility's")
-local GuiTab = Window:CreateTab("Guis")
-local MiscTab = Window:CreateTab("Misc")
+local UtilityTab = Window:CreateTab("🛠️ Utility's")
+local GuiTab = Window:CreateTab("📈 Guis")
+local MiscTab = Window:CreateTab("🤖 Misc")
 
 -- Sections within Tabs
 UtilityTab:CreateSection("Auto Functions")
@@ -32,7 +32,9 @@ local rebirthOptions = {
     ["50 Rebirths"] = 5,
     ["100 Rebirths"] = 6,
     ["250 Rebirths"] = 7,
-    ["500 Rebirths"] = 8
+    ["500 Rebirths"] = 8,
+    ["1000 Rebirths"] = 9,
+    ["2500 Rebirths"] = 10
 }
 
 local selectedAmount = 1
@@ -65,7 +67,7 @@ end
 local function startRebirthLoop()
     while rebirthLooping do
         invokeRebirth(selectedAmount)
-        wait(0.1)  -- Adjust the interval if necessary
+        wait(0)  -- Adjust the interval if necessary
     end
 end
 
@@ -114,7 +116,7 @@ UtilityTab:CreateToggle({
 
 UtilityTab:CreateDropdown({
     Name = "Select Rebirth Amount",
-    Options = {"1 Rebirth", "5 Rebirths", "10 Rebirths", "25 Rebirths", "50 Rebirths", "100 Rebirths", "250 Rebirths", "500 Rebirths"},
+    Options = {"1 Rebirth", "5 Rebirths", "10 Rebirths", "25 Rebirths", "50 Rebirths", "100 Rebirths", "250 Rebirths", "500 Rebirths", "1000 Rebirths", "2500 Rebirths"},
     CurrentOption = "1 Rebirth",
     MultipleOptions = false,
     Flag = "RebirthAmountDropdown",
@@ -167,42 +169,37 @@ GuiTab:CreateButton({
 MiscTab:CreateButton({
     Name = "Unlock All Islands",
     Callback = function()
-        local cframes = {
-            CFrame.new(-45.2208328, 655.03302, 32.4810486),
-            CFrame.new(-12.0547447, 1775.2915, 69.9209671),
-            CFrame.new(-1.27225876, 3221.25049, -4.00170898),
-            CFrame.new(-69.4390259, 5127.85059, 27.139679)
-        }
-        for _, cframe in ipairs(cframes) do
-            wait(1)  -- Aguarda 1 segundo entre os teletransportes
-            teleportToCFrame(cframe)  -- Teletransporta o jogador
+        local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        rootPart.CFrame = CFrame.new(-45.2208328, 655.03302, 32.4810486)
+        wait(1.5)
+        local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        rootPart.CFrame = CFrame.new(-12.0547447, 1775.2915, 69.9209671)
+        wait(1.5)
+        local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        rootPart.CFrame = CFrame.new(-1.27225876, 3221.25049, -4.00170898)
+        wait(1.5)
+        local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        rootPart.CFrame = CFrame.new(-69.4390259, 5127.85059, 27.139679)
+        wait(1.5)
+        local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        rootPart.CFrame = CFrame.new(-20.1509266, 7961.88135, 21.5478325, -1.1920929e-07, 1.00000012, 0, -1.00000012, -1.1920929e-07, 0, 0, 0, 1)
         end
-    end
-})
-
-
-MiscTab:CreateButton({
-    Name = "Infinite Yield",
-    Callback = function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
-    end
 })
 
 MiscTab:CreateButton({
     Name = "Claim All Chests",
     Callback = function()
-        local targetCFrame = CFrame.new(0.594842911, 659.270874, 65.061264)
-        local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-        if character and character:FindFirstChild("HumanoidRootPart") then
-            character.HumanoidRootPart.CFrame = targetCFrame
-        end
+        local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        rootPart.CFrame = CFrame.new(0.594842911, 659.270874, 65.061264)
+        wait(1.5)
+        local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+        rootPart.CFrame = CFrame.new(-30.4674435, 8016.84961, 162.720856, -1.2755394e-05, -0.819186091, -0.573527873, 1, -1.2755394e-05, -3.9935112e-06, -3.9935112e-06, -0.573527873, 0.819186032)
     end
-})
+    })
 
--- Helper function for teleporting the player
-local function teleportToCFrame(cframe)
-    local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        character.HumanoidRootPart.CFrame = cframe
-    end
-end
+ MiscTab:CreateButton({
+     Name = "Infinite Yield",
+     Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
+     end
+ })
